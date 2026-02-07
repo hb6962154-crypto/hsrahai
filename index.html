@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siri AI | සර්වඥ සහායක</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Noto+Sans+Sinhala:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', 'Noto Sans Sinhala', sans-serif; }
+        body { background: #f8f9fa; color: #333; scroll-behavior: smooth; }
+
+        /* Header Section */
+        /* Header Section */
+        header {
+            height: 80vh;
+            /* මෙතනට ඔයා කැමති ඕනෑම Image Link එකක් දාන්න පුළුවන් */
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                        url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* පින්තූරය පාවෙන (Parallax) ගතියක් දෙන්න */
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        } 
+        }
+
+        header h1 { font-size: 3rem; margin-bottom: 20px; }
+        header p { font-size: 1.2rem; opacity: 0.9; margin-bottom: 40px; }
+
+        /* Search Bar */
+        .search-container {
+            width: 100%;
+            max-width: 700px;
+            position: relative;
+        }
+        .search-container input {
+            width: 100%;
+            padding: 20px 30px;
+            border-radius: 50px;
+            border: none;
+            font-size: 18px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            outline: none;
+        }
+        .search-container button {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            padding: 10px 25px;
+            border-radius: 40px;
+            border: none;
+            background: #7c3aed;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .search-container button:hover { background: #1e3a8a; }
+
+        .powered-by { margin-top: 15px; font-size: 0.9rem; opacity: 0.8; }
+
+        /* Info Cards */
+        .info-section {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            padding: 60px 20px;
+            background: white;
+        }
+        .card {
+            background: #fff;
+            padding: 30px;
+            border-radius: 20px;
+            width: 300px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            text-align: center;
+            border: 1px solid #eee;
+        }
+        .card h3 { color: #7c3aed; margin-bottom: 15px; }
+        .card p { font-size: 14px; color: #666; }
+
+        /* Chat/Result Section */
+        #ai-section {
+            min-height: 60vh;
+            padding: 60px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .result-box {
+            width: 100%;
+            max-width: 800px;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            display: none;
+            line-height: 1.8;
+        }
+
+        .loader {
+            display: none;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #7c3aed;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Siri AI සහායක</h1>
+    <p>ලෝකයේ ඕනෑම දෙයක් ගැන තොරතුරු ක්ෂණිකව සිංහලෙන් දැනගන්න.</p>
+    
+    <div class="search-container">
+        <input type="text" id="userInput" placeholder="ඔබට අවශ්‍ය ඕනෑම දෙයක් මෙතැන ලියන්න...">
+        <button onclick="askAI()">සොයන්න</button>
+    </div>
+    <p class="powered-by">Powered by <b>Gemini AI</b></p>
+</header>
+
+<section class="info-section">
+    <div class="card">
+        <h3>අධ්‍යාපනය</h3>
+        <p>ඕනෑම විෂය කරුණක්, විද්‍යාත්මක සොයාගැනීම් හෝ ඉතිහාසය ගැන පහදා දෙන්න මට පුළුවන්.</p>
+    </div>
+    <div class="card">
+        <h3>තාක්ෂණය</h3>
+        <p>අලුත්ම Gadgets, Coding සහ අනාගත තාක්ෂණය ගැන තොරතුරු සොයාගන්න.</p>
+    </div>
+    <div class="card">
+        <h3>නිර්මාණශීලීත්වය</h3>
+        <p>කවි, ලිපි, හෝ ඕනෑම ලේඛනයක් ඔබ කැමති භාෂාවකින් නිර්මාණය කරගන්න.</p>
+    </div>
+</section>
+
+<section id="ai-section">
+    <div class="loader" id="loader"></div>
+    <div class="result-box" id="resultBox">
+        </div>
+</section>
+
+<script type="module">
+    import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
+
+    const API_KEY = "AIzaSyAGgt_6yO-dQCalSnaK1E3Sy3SCc1RVncE"; // ඔබේ API Key එක මෙතනට දාන්න
+    const genAI = new GoogleGenerativeAI(API_KEY);
+
+    window.askAI = async function() {
+        const query = document.getElementById("userInput").value;
+        const resultBox = document.getElementById("resultBox");
+        const loader = document.getElementById("loader");
+
+        if (!query) return alert("කරුණාකර යමක් ඇතුළත් කරන්න.");
+
+        // Scroll to AI section
+        document.getElementById("ai-section").scrollIntoView();
+        
+        loader.style.display = "block";
+        resultBox.style.display = "none";
+
+        try {
+            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+            const result = await model.generateContent(query);
+            const response = await result.response;
+            
+            loader.style.display = "none";
+            resultBox.style.display = "block";
+            resultBox.innerHTML = "<h3>පිළිතුර:</h3><br>" + response.text().replace(/\n/g, "<br>");
+        } catch (error) {
+            loader.style.display = "none";
+            resultBox.style.display = "block";
+            resultBox.innerHTML = "සමාවන්න, දෝෂයක් සිදු වුණා. කරුණාකර API Key එක පරීක්ෂා කරන්න.";
+        }
+    }
+</script>
+
+</body>
+</html>
